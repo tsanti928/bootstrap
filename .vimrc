@@ -76,6 +76,8 @@
     noremap <leader>b i<C-v>u2610<Esc>
     noremap <leader>c <Esc>r<C-v>u2611<Esc>
     noremap <leader>tt :set expandtab!<CR>
+    " Use OSC-52 sequence to copy to system clipboard
+    vnoremap <Leader>y :OSCYankVisual<CR>
 " }
 
     colorscheme desert
