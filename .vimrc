@@ -1,28 +1,34 @@
 " General {
     set nocompatible        " Must be first line
 
-    syntax on                   " Syntax highlighting
+    " Install provided the plugins
+    if filereadable(expand("~/.vimrc.plug"))
+      source ~/.vimrc.plug " vim-plug
+    endif
+
+    syntax enable               " Syntax highlighting
     set mouse=a                 " Automatically enable mouse usage
     set mousehide               " Hide the mouse cursor while typing
 
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
-    set virtualedit=onemore             " Allow for cursor beyond last character
+    set virtualedit=onemore                         " Allow for cursor beyond last character
     set history=100
-    set hidden                          " Allow buffer switching without saving
+    set hidden                                      " Allow buffer switching without saving
 
     set showmode                    " Display the current mode
     set cursorline                  " Highlight current line
 
-    set ruler                   " Show the ruler
+    set ruler                                          " Show the ruler
     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
-    set showcmd                 " Show partial commands in status line and
+    set showcmd                                        " Show partial commands in status line and
 
     " Broken down into easily includeable segments
-    set statusline=%<%f\                     " Filename
-    set statusline+=%w%h%m%r                 " Options
-    set statusline+=\ [%{&ff}/%Y]            " Filetype
-    set statusline+=\ [%{getcwd()}]          " Current dir
-    set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+    set statusline=%<%f\                    " Filename
+    set statusline+=%w%h%m%r                " Options
+    set statusline+=\ [%{&ff}/%Y]           " Filetype
+    set statusline+=\ [%{getcwd()}]         " Current dir
+    set statusline+=%=%-14.(%l,%c%V%)\ %p%% " Right aligned file nav info
+    set laststatus=2                        " Always show the status line
 
     set backspace=indent,eol,start  " Backspace for dummies
     set linespace=0                 " No extra spaces between rows
@@ -41,12 +47,14 @@
     set foldenable                  " Auto fold code
     set list
     set listchars=tab:>\ ,trail:*,extends:#,nbsp:. " Highlight problematic whitespace
-    " :retab fixes all tabs to spaces
+    set encoding=utf-8                             " Encoding
 
+    " Fix backspace and delete
+    set t_kb=
+    fixdel
 " }
 
 " Formatting {
-
     set nowrap                      " Do not wrap long lines
     set autoindent                  " Indent at the same level of the previous line
     set shiftwidth=4                " Use indents of 4 spaces
@@ -59,35 +67,38 @@
 " }
 
 " Key (re)Mappings {
-
     let mapleader = ','
 
     " Wrapped lines goes down/up to next row, rather than next line in file.
     noremap j gj
     noremap k gk
-    noremap <leader>tmp :!mkdir /tmp/.vim.backup <CR>
+
+    " Delete trailing spaces
     noremap <leader>s :%s/\s\+$//e <CR>
+
+    " Change into directory of the current file
     noremap <leader>dir :cd %:p:h <CR>
-    noremap <leader>u :set guifont=Monospace\ 16<CR>
-    noremap <leader>d :set guifont=Monospace\ 13<CR>
-    noremap <leader>ig :IndentGuidesToggle<CR>
-    noremap <leader>f :let @f = expand('%:p')<CR>
-    noremap <leader>p :set paste!<CR>
-    noremap <leader>b i<C-v>u2610<Esc>
-    noremap <leader>c <Esc>r<C-v>u2611<Esc>
+
+    " Copy fullpath of file into "f
+    noremap <leader>path :let @f = expand('%:p')<CR>
+
+    " Toggle paste mode
+    noremap <leader>tp :set paste!<CR>
+
+    " Insert unicode box
+    noremap <leader>box i<C-v>u2610<Esc>
+
+    " Replace with a checkbox
+    noremap <leader>check <Esc>r<C-v>u2611<Esc>
+
+    " Toggle expand tab
     noremap <leader>tt :set expandtab!<CR>
-    " Use OSC-52 sequence to copy to system clipboard
-    vnoremap <Leader>y :OSCYankVisual<CR>
 " }
 
+    " Colorscheme (default - but plugin can override)
     colorscheme desert
 
-    "Font
-    set guifont=Monospace\ 13
-
-    "Encoding
-    set encoding=utf-8
-
+    " Create the backup directory
     if has("gui_win32")
         if !isdirectory($TMP . "/.vim.backup")
             call mkdir($TMP . "/.vim.backup", "p")
@@ -102,10 +113,10 @@
         set directory=/tmp/.vim.backup
     endif
 
-    set laststatus=2
-
-    "Fix for funky chars
-    set t_kb=
-    fixdel
-
+   " Load file type specific settings
     filetype plugin indent on
+
+    " Load plugin specific configuration
+    if filereadable(expand("~/.vimrc.plugins"))
+      source ~/.vimrc.plugins
+    endif
