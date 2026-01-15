@@ -52,6 +52,10 @@
     " Fix backspace and delete
     set t_kb=
     fixdel
+
+    " Cycle between buffers
+    noremap <Tab> :bn<CR>
+    noremap <S-Tab> :bp<CR>
 " }
 
 " Formatting {
