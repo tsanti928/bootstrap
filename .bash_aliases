@@ -33,5 +33,19 @@ pcopy() {
     printf "\e]52;c;%s\a" "$buffer"
 }
 
+update_ps1(){
+    local rc="$?"
+    local u="$(uname -m)"
+
+    local arrow="\[\e[1;32m\]>"
+    if [[ $rc -ne 0 ]]; then
+        arrow="\[\e[0;31m\]>"
+    fi
+
+    PS1="\[\e[1;32m\]\u@\h \[\e[1;33m\]${u} \[\e[1;34m\]\W ${arrow} \[\e[0m\]"
+}
+
+export PROMPT_COMMAND=update_ps1
+
 # Ensure that Ctrl+s and Ctrl+r to cycle through history works.
 stty -ixon
