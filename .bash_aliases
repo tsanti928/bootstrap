@@ -8,6 +8,7 @@ alias pop='popd'
 alias sdirs='dirs -v'
 alias cdirs='dirs -c'
 alias salias=". ${BASH_SOURCE[0]}"
+alias valias="v ${BASH_SOURCE[0]}"
 alias showbinds='bindkey'
 alias showports='lsof -i -P -n'
 alias stracev='strace -f -yy --decode-pids=pidns -Y -v $*'
